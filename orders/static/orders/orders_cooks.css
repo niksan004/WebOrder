@@ -1,0 +1,79 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background-color: #ebe8e1;
+}
+
+.header-wrap {
+	height: 110px;
+}
+
+.header {
+	position: fixed;
+    padding-left: 25px;
+    padding-top: 15px;
+    padding-bottom: 0px;
+    height: 110px;
+    margin: 0;
+    width: 100%;
+    font-size: 325%;
+    font-family: 'Kurale', serif;
+    display: flex;
+    justify-content: space-between;
+    vertical-align : middle;
+    border-bottom: 1px solid grey;
+    background-color: #ebe8e1;
+}
+
+.orders-title {
+	text-align: center;
+	margin: 40px;
+	font-size: 250%;
+	color: #a73b07d6;
+}
+
+#orders-cooks {
+	display: table;
+    margin: auto;
+    text-align: center;
+    color: #a73b07d6;
+}
+
+th {
+	font-size: 150%;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+td {
+	color: black;
+	padding-top: 20px;
+  	padding-bottom:20px;   
+}
+
+.ingredients, .quantity {
+	color: grey;
+}
+
+.done-btn {
+	padding-bottom: 5px;
+	padding-top: 5px;
+	padding-left: 15px;
+	padding-right: 15px;
+	height: 2em;
+	border: 1px solid #c3b3a4;
+	outline:none;
+	background-color: #ebe8e1;
+	color: #56404d;
+}
+
+.done-btn:hover {
+    background-color: #ada095;
+}
+
+.done-btn:active {
+  background-color: #9a9189;
+}

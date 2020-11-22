@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add</title>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        <div class="add-fields">
+            <h3>Добавете категориите: {{ add_category.category }}</h3>
+        </div>
+        <input type="submit" name="cat_btn" value="Въвеждане">
+    </form>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="add-fields">
+            <h3>Име: {{ form_dish.name }}</h3>
+        </div>
+        <div class="add-fields">
+            <h3>Съставки: {{ form_dish.ingredients }}</h3>
+        </div>
+        <div class="add-fields">
+            <h3>Количество: {{ form_dish.quantity }}</h3>
+        </div>
+        <div class="add-fields">
+            <h3>Цена: {{ form_dish.price }}</h3>
+        </div>
+        <div class="add-fields">
+            <h3>Категория: {{ form_dish.category }}</h3>
+        </div>
+        <input type="submit" name="dish_btn" value="Въвеждане">
+    </form>
+</body>
+</html>

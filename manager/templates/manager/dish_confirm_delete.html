@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h2>Сигурен ли сте, че искате да изтриете {{ object.name }}?</h2>
+    <form method="post">
+        {% csrf_token %}
+        <p><input type="submit" value="Да"></p>
+    </form>
+    <button onclick="location.href='{% url 'dashboard' %}'">Не</button>
+</body>
+</html>

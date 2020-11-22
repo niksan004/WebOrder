@@ -1,0 +1,102 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background-color: #ebe8e1;
+}
+
+.header-wrap {
+	height: 110px;
+}
+
+.header {
+	position: fixed;
+    padding-left: 25px;
+    padding-top: 15px;
+    padding-bottom: 0px;
+    height: 110px;
+    margin: 0;
+    width: 100%;
+    font-size: 325%;
+    font-family: 'Kurale', serif;
+    display: flex;
+    justify-content: space-between;
+    vertical-align : middle;
+    border-bottom: 1px solid grey;
+    background-color: #ebe8e1;
+}
+
+a {
+	height: 90.19px;
+	width: 115.19px;
+}
+
+.header-icon{
+	height: 80%;
+}
+
+.picture-window {
+    background-color: #d1baa3;
+    text-align: center;
+    border-bottom: 1px solid grey;
+}
+
+.menu {
+	display: table;
+    margin: auto;
+    color: #a73b07d6;
+}
+
+.menu-title {
+	text-align: center;
+	margin: 40px;
+	font-size: 250%;
+}
+
+.category {
+	font-size: 175%;
+	font-weight: normal;
+}
+
+.dish-container {
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-bottom: 15px;
+	margin: 13px;
+	color: black;
+}
+
+.name {
+	font-size: 120%;
+	font-weight: 600;
+}
+
+.dish-stats {
+	font-family: 'Lora', serif;
+	color: grey;
+}
+
+.buy-btn {
+    display: table;
+    margin: auto;
+    font-size: 150%;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    height: 2em;
+    border: 2px solid #c3b3a4;
+    outline: none;
+    background-color: #ebe8e1;
+    color: #56404d;
+}
+
+.buy-btn:hover {
+    background-color: #ada095;
+}
+
+.buy-btn:active {
+  background-color: #9a9189;
+}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Distribution</title>
+</head>
+<body>
+    <table id="orders-cooks">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Ingredients</th>
+                <th>Quantity</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        {% for order in orders %}
+            <tbody>
+                <tr>
+                    <td><strong>{{ order.name }}</strong></td>
+                    <td>{{ order.ingredients }}</td>
+                    <td>{{ order.quantity }}</td>
+                    <td>{{ order.price }}</td>
+                    <td>
+                        <form class="done" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="done_order_id" value="{{ order.id }}">
+                            <input type="submit" name="done_order" value="Done">
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        {% endfor %}
+    </table>
+</body>
+</html>

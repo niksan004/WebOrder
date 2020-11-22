@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <table id="orders-cooks">
+        <thead>
+            <tr>
+                <th>Име</th>
+                <th>Променяне на ястие</th>
+                <th>Изтриване на ястие</th>
+            </tr>
+        </thead>
+        {% for dish in dishes %}
+            <tbody>
+                <tr>
+                    <td><strong>{{ dish.name }}</strong></td>
+                    <td><a href="{% url 'edit_dish' dish.pk %}">Промени</a></td>
+                    <td><a href="{% url 'delete_dish' dish.pk %}">Изтрий</a></td>
+                </tr>
+            </tbody>
+        {% endfor %}
+    </table>
+</body>
+</html>

@@ -1,0 +1,105 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background-color: #ebe8e1;
+}
+
+.header-wrap {
+    height: 110px;
+}
+
+.header {
+    position: fixed;
+    padding-left: 25px;
+    padding-top: 15px;
+    padding-bottom: 0px;
+    height: 110px;
+    margin: 0;
+    width: 100%;
+    font-size: 325%;
+    font-family: 'Kurale', serif;
+    display: flex;
+    justify-content: space-between;
+    vertical-align : middle;
+    border-bottom: 1px solid grey;
+    background-color: #ebe8e1;
+}
+
+a {
+    height: 85.19px;
+    width: 130.19px;
+}
+
+.header-icon{
+    height: 100%;
+}
+
+.picture-window {
+    background-color: #d1baa3;
+    text-align: center;
+    height: 471px;
+}
+
+.picture {
+	height: 467px;
+	padding-top: 40px;
+	padding-bottom: 20px;
+}
+
+.orders {
+	display: table;
+    margin: auto;
+    color: #a73b07d6;
+}
+
+.orders-title {
+	text-align: center;
+	margin: 40px;
+	font-size: 250%;
+}
+
+#unc-orders-table, #c-orders-table {
+    margin: auto;
+	color: black;
+}
+
+td {
+	padding-top: 20px;
+  	padding-bottom:20px;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.ingredients {
+	color: grey;
+}
+
+.name, .ingredients, .quantity {
+	padding-right: 20px
+}
+
+#confirm-orders {
+    display: table;
+    margin: auto;
+    font-size: 150%;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    height: 2em;
+    border: 2px solid #c3b3a4;
+    outline: none;
+    background-color: #ebe8e1;
+    color: #56404d;
+}
+
+#confirm-orders:hover {
+    background-color: #ada095;
+}
+
+#confirm-orders:active {
+  background-color: #9a9189;
+}
