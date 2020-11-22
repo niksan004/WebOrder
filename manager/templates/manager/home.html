@@ -1,39 +1,55 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'manager/home.css' %}">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Kurale&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="url-table">
-        <button><a href="{% url 'new_category' %}">Създай категория</a></button>
-        <br>
-        <button><a href="{% url 'new_dish' %}">Създай ястие</a></button>
+        <div class="header-wrap">
+            <header class="header">
+                WebOrder
+            </header>
+        </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Table</th>
-                    <th>Random URL</th>
-                    <th></th>
-                </tr>
-            </thead>
-            {% for table in tables %}
-                <tbody>
+        <div class="content">
+            <h1 class="admin-panel">~ Административен Панел ~</h1>
+
+            <div class="btns">
+                <p><button class="btn create"><a href="{% url 'new_category' %}">Създай категория</a></button></p>
+                <p><button class="btn create"><a href="{% url 'new_dish' %}">Създай ястие</a></button></p>
+            </div>
+
+            <table border=1 frame=void rules=rows>
+                <thead>
                     <tr>
-                        <td><h3>{{ table.id }}</h3></td>
-                        <td><p>{{ table.url }}</p></td>
-                        <td>
-                            <form class="change-url" method="post">
-                                {% csrf_token %}
-                                <input type="hidden" name="id" value="{{ table.id }}">
-                                <input type="submit" name="new_url" value="Нов линк">
-                            </form>
-                        </td>
+                        <th>Маса</th>
+                        <th>Линк</th>
+                        <th></th>
                     </tr>
-                </tbody>
-            {% endfor %}
-        </table>
+                </thead>
+                {% for table in tables %}
+                    <tbody>
+                        <tr>
+                            <td><h3>{{ table.id }}</h3></td>
+                            <td><p>{{ table.url }}</p></td>
+                            <td>
+                                <form class="change-url" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="id" value="{{ table.id }}">
+                                    <input type="submit" name="new_url" value="Нов линк" class="btn">
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                {% endfor %}
+            </table>
+        </div>
     </div>
     
     <script src="https://ajax.googleapis.com/ajax/libs/d3js/6.2.0/d3.min.js"></script>

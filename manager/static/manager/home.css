@@ -28,64 +28,25 @@ body {
     background-color: #ebe8e1;
 }
 
+.btns {
+	margin-bottom: 30px;
+}
+
 a {
-	height: 90.19px;
-	width: 115.19px;
+	text-decoration: none;
 }
 
-.header-icon{
-	height: 80%;
-}
-
-.picture-window {
-    background-color: #d1baa3;
-    text-align: center;
-    border-bottom: 1px solid grey;
-}
-
-.menu {
+.content {
 	display: table;
     margin: auto;
     color: #a73b07d6;
 }
 
-.menu-title {
-	text-align: center;
-	margin: 40px;
-	font-size: 250%;
-}
-
-.category {
-	font-size: 175%;
-	font-weight: normal;
-}
-
-.dish-container {
-	padding-left: 15px;
-	padding-right: 15px;
-	padding-bottom: 15px;
-	margin: 13px;
+table {
 	color: black;
 }
 
-.dish-picture {
-	height: 140px;
-	float: left;
-	margin-right: 20px;
-	margin-bottom
-}
-
-.name {
-	font-size: 120%;
-	font-weight: 600;
-}
-
-.dish-stats {
-	font-family: 'Lora', serif;
-	color: grey;
-}
-
-.buy-btn {
+.btn {
 	padding-bottom: 5px;
 	padding-top: 5px;
 	padding-left: 15px;

@@ -5,6 +5,10 @@ from django.http import JsonResponse
 from menu.models import Dish, Table
 from .models import CooksOrders, DistributionOrders
 
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+from accounts.decorators import cook_required
+
 import json
 
 
@@ -103,6 +107,7 @@ class ConfirmOrdersView(View):
             return JsonResponse({'new_order': unc_orders}, status=200)
 
 
+@method_decorator([login_required, cook_required], name='dispatch')
 class CooksOrdersView(ListView):
     model = CooksOrders
     template_name = 'orders/orders_cooks.html'

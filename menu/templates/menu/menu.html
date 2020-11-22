@@ -30,6 +30,7 @@
                     {% for dish in dishes %}
                         {% if dish.category == category %}
                             <div class="dish-container">
+                                <img class="dish-picture" src="{% static 'menu/pork.jpg' %}">
                                 <p class="name">{{ dish.name }}</p>
                                 <div class="dish-stats">
                                     <p class="text">{{ dish.ingredients }}</p>

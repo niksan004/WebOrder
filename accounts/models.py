@@ -2,19 +2,22 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
+class Role(models.Model):
+    COOK = 1
+    DISTRIBUTOR = 2
+    MANAGER = 3
+
+    ROLE_CHOICES = (
+      (COOK, 'cook'),
+      (DISTRIBUTOR, 'distributor'),
+      (MANAGER, 'manager'),
+    )
+
+    id = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, primary_key=True)
+
+    def __str__(self):
+        return self.get_id_display()
+
+
 class User(AbstractUser):
-    is_cook = models.BooleanField('cook status', default=False)
-    is_distributor = models.BooleanField('distributor status', default=False)
-    is_manager = models.BooleanField('manager status', default=False)
-
-
-class Cook(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-
-
-class Distributor(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-
-
-class Manager(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    roles = models.ForeignKey(Role, on_delete=models.CASCADE, blank=True, null=True)
