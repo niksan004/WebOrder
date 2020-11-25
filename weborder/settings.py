@@ -25,9 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'q!$(zdf+4n%+zaqbq^a8v)q%imy!_w0qre)a7797j8agi92aw0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -131,9 +131,8 @@ STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = '/orders/cooks_orders'
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(os.path.dirname(
-    BASE_DIR), "media_root")
 
 CSRF_COOKIE_SECURE = True
 

@@ -34,6 +34,7 @@ body {
 
 a {
 	text-decoration: none;
+    color: black;
 }
 
 .content {
@@ -42,17 +43,40 @@ a {
     color: #a73b07d6;
 }
 
+.admin-panel {
+    text-align: center;
+}
+
 table {
 	color: black;
 }
 
+th {
+    font-size: 120%;
+}
+
 .btn {
-	padding-bottom: 5px;
-	padding-top: 5px;
-	padding-left: 15px;
-	padding-right: 15px;
-	height: 2em;
-	border: 1px solid #c3b3a4;
-	background-color: #ebe8e1;
-	color: #56404d;
+    display: table;
+    margin: auto;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    height: 2em;
+    border: 2px solid #c3b3a4;
+    outline:none;
+    background-color: #ebe8e1;
+    color: #56404d;
+}
+
+.create {
+    font-size: 120%;
+}
+
+.btn:hover {
+    background-color: #ada095;
+}
+
+.btn:active {
+  background-color: #9a9189;
 }

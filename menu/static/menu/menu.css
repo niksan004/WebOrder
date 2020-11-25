@@ -68,11 +68,10 @@ a {
 	color: black;
 }
 
-.dish-picture {
+.dish-image {
 	height: 140px;
 	float: left;
 	margin-right: 20px;
-	margin-bottom
 }
 
 .name {
@@ -86,12 +85,21 @@ a {
 }
 
 .buy-btn {
-	padding-bottom: 5px;
-	padding-top: 5px;
-	padding-left: 15px;
-	padding-right: 15px;
-	height: 2em;
-	border: 1px solid #c3b3a4;
-	background-color: #ebe8e1;
-	color: #56404d;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    height: 2em;
+    border: 2px solid #c3b3a4;
+    outline:none;
+    background-color: #ebe8e1;
+    color: #56404d;
+}
+
+.buy-btn:hover {
+    background-color: #ada095;
+}
+
+.buy-btn:active {
+  background-color: #9a9189;
 }
