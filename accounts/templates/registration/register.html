@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'accounts/registration.css' %}">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Kurale&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora&display=swap" rel="stylesheet">
+</head>
+<body>
+	<div class="header-wrap">
+        <header class="header">
+            WebOrder
+        </header>
+    </div>
+
+    <div class="content">
+        <h1 class="subtitle">~ Регистрация ~</h1>
+		    <form method="post">
+		    	<ul>
+			        {% csrf_token %}
+			        <li>Потребителско име: {{ form.username }}</li>
+			        <li>E-mail: {{ form.email }}</li>
+			        <li>Ако сте готвач: {{ form.is_cook }}</li>
+			        <li>Ако сте сервитьор: {{ form.is_distributor }}</li>
+			        <li>Ако сте администратор: {{ form.is_admin }}</li>
+			        <li>Парола: {{ form.password1 }}</li>
+			        <li>Потвърждаване на паролата: {{ form.password2 }}</li>
+		        </ul>
+		        <p><input type="submit" value="Създай" class="btn"></p>
+		    </form>
+	</div>	
+</body>
+</html>

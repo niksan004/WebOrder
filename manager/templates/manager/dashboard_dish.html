@@ -1,11 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <table id="orders-cooks">
+{% extends 'manager/base.html' %}
+
+{% block title %} Управление на менюто {% endblock %}
+
+{% block sub_title %} ~ Управление на менюто ~ {% endblock %}
+
+{% block content %}
+    <button onclick="location.href='{% url 'manager_home' %}'" class="btn">Назад</button>
+
+    <table id="orders-cooks"  border=1 frame=void rules=rows>
         <thead>
             <tr>
                 <th>Име</th>
@@ -17,11 +19,10 @@
             <tbody>
                 <tr>
                     <td><strong>{{ dish.name }}</strong></td>
-                    <td><a href="{% url 'edit_dish' dish.pk %}">Промени</a></td>
-                    <td><a href="{% url 'delete_dish' dish.pk %}">Изтрий</a></td>
+                    <td><button class="btn"><a href="{% url 'edit_dish' dish.pk %}">Промени</a></button></td>
+                    <td><button class="btn"><a href="{% url 'delete_dish' dish.pk %}">Изтрий</a></button></td>
                 </tr>
             </tbody>
         {% endfor %}
     </table>
-</body>
-</html>
+{% endblock %}

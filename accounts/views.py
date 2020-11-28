@@ -1,12 +1,27 @@
 from django.shortcuts import render, redirect
-from django.views.generic import View, CreateView
-from django.urls import reverse, reverse_lazy
-from django.contrib.auth import authenticate, login, logout
+from django.views.generic.edit import FormView, View
+from django.contrib.auth.views import LoginView
+from django.contrib.auth import authenticate, login
 
-from .forms import SignUpForm
+from .forms import CustomUserCreationForm, CustomUserLoginForm, CustomUserChangeForm
 
 
-class SignUpView(CreateView):
-    success_url = reverse_lazy('login')
-    form_class = SignUpForm
-    template_name = 'accounts/register.html'
+class RegisterView(FormView):
+    template_name = 'registration/register.html'
+    form_class = CustomUserCreationForm
+    success_url = '/orders/cooks'
+
+    def form_valid(self, form):
+        form.save()
+        return super(RegisterView, self).form_valid(form)
+
+
+class Login(LoginView):
+    authentication_form = CustomUserLoginForm
+    form_class = CustomUserLoginForm
+    template_name = 'registration/register.html'
+
+    def form_valid(self, form):
+        login(self.request, form.get_user())
+
+        return super(LoginView, self).form_valid(form)

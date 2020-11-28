@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Административен панел</title>
     <link rel="stylesheet" type="text/css" href="{% static 'manager/home.css' %}">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Kurale&display=swap" rel="stylesheet">
@@ -21,8 +21,13 @@
             <h1 class="admin-panel">~ Административен Панел ~</h1>
 
             <div class="btns">
-                <p><button class="btn create"><a href="{% url 'new_category' %}">Създай категория</a></button></p>
-                <p><button class="btn create"><a href="{% url 'new_dish' %}">Създай ястие</a></button></p>
+                <ul>
+                    <li><button class="btn create"><a href="{% url 'new_category' %}">Създай категория</a></button></li>
+                    <li><button class="btn create"><a href="{% url 'new_dish' %}">Създай ястие</a></button></li>
+                    <li><button class="btn create"><a href="{% url 'dashboard' %}">Управление на менюто</a></button></li>
+                    <li><button class="btn create"><a href="{% url 'new_tables' %}">Добавяне на маси</a></button></li>
+                    <li><button class="btn create"><a href="{% url 'display_qr' %}">QR кодове</a></button></li>
+                </ul>
             </div>
 
             <table border=1 frame=void rules=rows>
@@ -30,6 +35,7 @@
                     <tr>
                         <th>Маса</th>
                         <th>Линк</th>
+                        <th>Сметка</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -38,6 +44,7 @@
                         <tr>
                             <td><h3>{{ table.id }}</h3></td>
                             <td><p>weborder.sliven.org/menu/{{ table.url }}</p></td>
+                            <td class="check"><p>{{ table.check }} лв</p></td>
                             <td>
                                 <form class="change-url" method="post">
                                     {% csrf_token %}

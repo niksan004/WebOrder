@@ -18,7 +18,7 @@
 
     <div class="picture-window">
         <img src="{% static 'orders/shopping-cart.png' %}" class="picture">
-    </div> 
+    </div>
 
     <div class="orders">
         <h1 class="orders-title">~ НЕПОТВЪРДЕНИ ПОРЪЧКИ ~</h1>
@@ -30,6 +30,13 @@
                         <td class="ingredients">{{ order.ingredients }}</td>
                         <td class="quantity">{{ order.quantity }} гр</td>
                         <td class="price">{{ order.price }} лв</td>
+                        <td>
+                            <form class="cancel" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="order_id" value="{{ order.id }}">
+                                <input type="submit" name="done_order" value="Отмени" class="btn">
+                            </form>
+                        </td>
                     </tr>
                 </tbody>
             {% endfor %}
@@ -68,6 +75,14 @@
             confirmOrders({{ current_table }});
         });
 
+        $(".cancel").on('submit', function (e) {
+            e.preventDefault();
+            $(this).closest('tr').remove();
+            order_id = $(this).find('input[name="order_id"]').val();
+            console.log(order_id);
+            cancelOrder(order_id);
+        });
+
         function confirmOrders(table) {
             console.log(table);
 
@@ -83,6 +98,24 @@
                     $( "#unc-orders-table" ).load( "{{ random_url }} #unc-orders-table" );
                     $( "#c-orders-table" ).load( "{{ random_url }} #c-orders-table" );
                     $( "#price" ).load( "{{ random_url }} #price" );
+                },
+            });
+        }
+
+        function cancelOrder(order_id) {
+            console.log(order_id);
+
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'cancel_order' %}",
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    order_id: JSON.stringify(order_id),
+                    current_table: JSON.stringify({{ current_table }})
+                },
+                success: function (data) {
+                    console.log('success222');
+                    $( "#unc-orders-table" ).load( "{{ random_url }} #unc-orders-table" );
                 },
             });
         }

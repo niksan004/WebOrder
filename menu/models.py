@@ -50,7 +50,8 @@ class Table(models.Model):
     url = models.UUIDField(default=uuid.uuid4)
     unconfirmed_orders = models.TextField(null=True, default='[]')
     confirmed_orders = models.TextField(null=True, default='[]')
-    # QR = models.ForeignKey(QrCode, on_delete=models.CASCADE, blank=True)
+    check = models.FloatField(default=0)
+    QR = models.ForeignKey(QrCode, on_delete=models.CASCADE, blank=True)
 
     def __str__(self):
         return f'{self.id}'

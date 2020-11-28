@@ -7,7 +7,7 @@ from .models import CooksOrders, DistributionOrders
 
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from accounts.decorators import cook_required
+from accounts.decorators import cook_required, distributor_required
 
 import json
 
@@ -77,7 +77,7 @@ class ConfirmOrdersView(View):
             json_dec = json.decoder.JSONDecoder()
 
             current_table = Table.objects.get(pk=order_table)
-            # current_table_tuple = current_table.id
+            current_table_tuple = current_table.id
 
             unc_orders_ser = current_table.unconfirmed_orders
             unc_orders = json_dec.decode(unc_orders_ser)
@@ -91,44 +91,114 @@ class ConfirmOrdersView(View):
             current_table.confirmed_orders = json.dumps(orders)
             current_table.save()
 
-            cooks = CooksOrders()
-            cooks.orders = json.dumps(orders)
-            cooks.save()
+            final_orders = []
+            for order in orders:
+                final_orders.append((current_table_tuple, order))
+            print(final_orders)
+            tuple_orders = tuple(final_orders)
 
-            # final_orders = []
-            # for order in orders:
-            #     final_orders.append((current_table_tuple, order))
-            # tuple_orders = tuple(final_orders)
-            #
-            # dist = DistributionOrders()
-            # dist.orders = tuple_orders = tuple(final_orders)
-            # dist.save()
+            cooks = CooksOrders()
+            cooks.orders = json.dumps(tuple_orders)
+            cooks.save()
 
             return JsonResponse({'new_order': unc_orders}, status=200)
 
 
-@method_decorator([login_required, cook_required], name='dispatch')
-class CooksOrdersView(ListView):
-    model = CooksOrders
-    template_name = 'orders/orders_cooks.html'
-    context_object_name = 'orders'
+class CancelOrderView(View):
+    def post(self, request):
+        if request.is_ajax():
+            order_id = request.POST.get("order_id", "")
+            current_table = request.POST.get("current_table", "")
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+            json_dec = json.decoder.JSONDecoder()
+
+            table = Table.objects.get(pk=json_dec.decode(current_table))
+            orders = json_dec.decode(table.unconfirmed_orders)
+            orders.remove(json_dec.decode(order_id))
+            table.unconfirmed_orders = json.dumps(orders)
+            table.save()
+            return JsonResponse({'message': 'success'}, status=200)
+
+
+@method_decorator([login_required, cook_required], name='dispatch')
+class CooksOrdersView(View):
+    def get(self, request):
+        orders_obj = CooksOrders.objects.latest('id')
 
         json_dec = json.decoder.JSONDecoder()
+        orders_ids = json_dec.decode(orders_obj.orders)
+
+        print(orders_ids)
 
         orders = []
+        for order_id in orders_ids:
+            orders.append(Dish.objects.get(pk=order_id[1]))
 
-        for i in CooksOrders.objects.all():
-            for order in json_dec.decode(i.orders):
-                orders.append(Dish.objects.get(pk=order))
+        orders = zip(orders, orders_ids)
 
-        context['orders'] = orders
-
-        return context
+        context = {'orders': orders}
+        return render(request, 'orders/orders_cooks.html', context)
 
 
 class DoneCooksOrdersView(View):
     def post(self, request):
-        order_table = request.POST.get("order_table", "")
+        done_order_id = request.POST.get("done_order_id", "")
+
+        json_dec = json.decoder.JSONDecoder()
+
+        orders = json_dec.decode(CooksOrders.objects.latest('id').orders)
+
+        for index, order in enumerate(orders):
+            if int(order[1]) == int(json_dec.decode(done_order_id)):
+                del orders[index]
+                break
+
+        cooks = CooksOrders.objects.latest('id')
+        cooks.orders = json.dumps(orders)
+        cooks.save()
+
+        return JsonResponse({'message': 'success'}, status=200)
+
+
+@method_decorator([login_required, distributor_required], name='dispatch')
+class DistributeOrdersView(View):
+    def post(self, request):
+        id_table_ser = request.POST.get("id_table", "")
+
+        json_dec = json.decoder.JSONDecoder()
+        id_table = json_dec.decode(id_table_ser)
+
+        id_table_list = []
+        print(id_table)
+        print(id_table[1])
+        print(id_table[5])
+        id_table_list.append(id_table[1])
+        id_table_list.append(id_table[5])
+
+        distributors = DistributionOrders.objects.latest('id')
+        orders = [i for i in json_dec.decode(distributors.orders)]
+
+        orders.append(id_table_list)
+        print(orders)
+
+        distributors.orders = json.dumps(orders)
+        distributors.save()
+
+        return JsonResponse({'message': 'success'}, status=200)
+
+    def get(self, request):
+        distributors = DistributionOrders.objects.latest('id')
+        json_dec = json.decoder.JSONDecoder()
+        orders_ids = [i for i in json_dec.decode(distributors.orders)]
+
+        orders = []
+        tables = []
+        for order_id in orders_ids:
+            orders.append(Dish.objects.get(pk=order_id[1]))
+            tables.append(order_id[0])
+
+        orders = zip(orders, tables)
+
+        context = {'orders': orders}
+
+        return render(request, 'orders/orders_distribution.html', context)

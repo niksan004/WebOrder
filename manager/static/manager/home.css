@@ -32,6 +32,10 @@ body {
 	margin-bottom: 30px;
 }
 
+li {
+    display: inline-block;
+}
+
 a {
 	text-decoration: none;
     color: black;
@@ -49,10 +53,16 @@ a {
 
 table {
 	color: black;
+    display: table;
+    margin: auto;
 }
 
 th {
     font-size: 120%;
+}
+
+.check {
+    padding-left: 10px;
 }
 
 .btn {

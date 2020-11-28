@@ -1,15 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'manager/base.html' %}
+
+{% block title %} Създаване на ястие {% endblock %}
+
+{% block sub_title %} ~ Създаване на ястие ~ {% endblock %}
+
+{% block content %}
     <form enctype="multipart/form-data" method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <p><input type="submit" value="Създай"></p>
-        <button><a href="{% url 'manager_home' %}">Назад</a></button>
+        <ul>
+	        <li>Име: {{ form.name }}</li>
+	        <li>Съставки: {{ form.ingredients }}</li>
+	        <li>Количество: {{ form.quantity }}</li>
+	        <li>Цена: {{ form.price }} лв</li>
+	        <li>Категория: {{ form.category }}</li>
+	        <li>Снимка: {{ form.image }}</li>
+	        <p><input type="submit" value="Създай" class="btn"></p>
+	        <button class="btn"><a href="{% url 'manager_home' %}">Назад</a></button>
+        </ul>  
     </form>
-</body>
-</html>
+{% endblock %}

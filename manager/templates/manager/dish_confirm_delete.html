@@ -1,15 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <h2>Сигурен ли сте, че искате да изтриете {{ object.name }}?</h2>
+{% extends 'manager/base.html' %}
+
+{% block title %} Изтриване на ястие {% endblock %}
+
+{% block sub_title %} ~ Сигурен ли сте, че искате да изтриете {{ object.name }}? ~ {% endblock %}
+
+{% block content %}
     <form method="post">
         {% csrf_token %}
-        <p><input type="submit" value="Да"></p>
+        <p><input type="submit" value="Да" class="btn"></p>
+        <button class="btn"><a href="{% url 'dashboard' %}">Не</button>
     </form>
-    <button onclick="location.href='{% url 'dashboard' %}'">Не</button>
-</body>
-</html>
+{% endblock %}

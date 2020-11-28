@@ -3,12 +3,17 @@ from django.views.generic import View, CreateView, UpdateView, ListView, DeleteV
 from django.urls import reverse, reverse_lazy
 from django.http import JsonResponse
 
-from menu.models import Category, Dish, Table
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+from accounts.decorators import admin_required
+
+from menu.models import Category, Dish, Table, QrCode
 
 import uuid
 import json
 
 
+@method_decorator([login_required, admin_required], name='dispatch')
 class Home(View):
     def post(self, request):
         if request.is_ajax():
@@ -17,12 +22,20 @@ class Home(View):
             json_dec = json.decoder.JSONDecoder()
             table = json_dec.decode(json_table)
 
+            url = uuid.uuid4()
+
+            curr_qr = QrCode.objects.get(pk=table)
+            curr_qr.name = f'weborder.sliven.org/menu/{url}'
+            curr_qr.save()
+
             curr_table = Table.objects.get(pk=table)
-            curr_table.url = uuid.uuid4()
+            curr_table.url = url
+            curr_table.QR = curr_qr
 
             orders_list = []
             curr_table.confirmed_orders = json.dumps(orders_list)
             curr_table.unconfirmed_orders = json.dumps(orders_list)
+            curr_table.check = 0
             curr_table.save()
 
             context = {'tables': 'please'}
@@ -33,6 +46,26 @@ class Home(View):
         return render(request, 'manager/home.html', {'tables': tables})
 
 
+@method_decorator([login_required, admin_required], name='dispatch')
+class CheckUpdate(View):
+    def post(self, request):
+        id_order_ser = request.POST.get("order", "")
+        id_table_ser = request.POST.get("table", "")
+
+        json_dec = json.decoder.JSONDecoder()
+        id_order = json_dec.decode(id_order_ser)
+        id_table = json_dec.decode(id_table_ser)
+
+        table = Table.objects.get(pk=int(id_table))
+        price = Dish.objects.get(pk=int(id_order)).price
+
+        table.check = table.check + price
+        table.save()
+
+        return JsonResponse({'message': 'success'}, status=200)
+
+
+@method_decorator([login_required, admin_required], name='dispatch')
 class NewCategory(CreateView):
     model = Category
     template_name = 'manager/category_form.html'
@@ -42,6 +75,7 @@ class NewCategory(CreateView):
         return reverse('new_category')
 
 
+@method_decorator([login_required, admin_required], name='dispatch')
 class NewDish(CreateView):
     model = Dish
     template_name = 'manager/dish_form.html'
@@ -51,11 +85,41 @@ class NewDish(CreateView):
         return reverse('new_dish')
 
 
+@method_decorator([login_required, admin_required], name='dispatch')
+class NewTables(View):
+    def get(self, request):
+        return render(request, 'manager/table_form.html')
+
+    def post(self, request):
+        new_QR = QrCode()
+        url = uuid.uuid4()
+        new_QR.name = f'weborder.sliven.org/menu/{url}'
+        new_QR.save()
+
+        new_table = Table()
+        new_table.url = url
+        new_table.QR = new_QR
+        new_table.save()
+        return JsonResponse({'message': 'success'}, status=200)
+
+
+@method_decorator([login_required, admin_required], name='dispatch')
+class DisplayQR(View):
+    def get(self, request):
+        QR = QrCode.objects.all()
+        tables = Table.objects.all()
+        display = zip(tables, QR)
+        context = {'display': display}
+        return render(request, 'manager/QR.html', context)
+
+
+@method_decorator([login_required, admin_required], name='dispatch')
 class Dishes(ListView):
     model = Dish
     context_object_name = 'dishes'
 
 
+@method_decorator([login_required, admin_required], name='dispatch')
 class DashboardDish(View):
     def get(self, request, *args, **kwargs):
         view = Dishes.as_view(
@@ -65,6 +129,7 @@ class DashboardDish(View):
         return view(request, *args, **kwargs)
 
 
+@method_decorator([login_required, admin_required], name='dispatch')
 class EditDish(UpdateView):
     model = Dish
     template_name = 'manager/edit_dish.html'
@@ -74,6 +139,7 @@ class EditDish(UpdateView):
         return reverse('dashboard')
 
 
+@method_decorator([login_required, admin_required], name='dispatch')
 class DeleteDish(DeleteView):
     model = Dish
     template_name = 'manager/dish_confirm_delete.html'

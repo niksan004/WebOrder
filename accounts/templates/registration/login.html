@@ -1,20 +1,31 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Влизане</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'accounts/registration.css' %}">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Kurale&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora&display=swap" rel="stylesheet">
 </head>
 <body>
-    <form method="post" action="{% url 'login' %}">
-        {% csrf_token %}
-        <p>{{ form.username.label_tag }}</p>
-        <p>{{ form.username }}</p>
+    <div class="header-wrap">
+        <header class="header">
+            WebOrder
+        </header>
+    </div>
 
-        <p>{{ form.password.label_tag }}</p>
-        <p>{{ form.password }}</p>
-
-        <p>{{ form.errors }}</p>
-        <p><input type="submit" value="Влез"></p>
-    </form>
+    <div class="content">
+        <h1 class="subtitle">~ Регистрация ~</h1>
+		    <form method="post">
+		    	<ul>
+			        {% csrf_token %}
+			        <li>Потребителско име: {{ form.username }}</li>
+			        <li>Парола: {{ form.password }}</li>
+		        </ul>
+		        <p><input type="submit" value="Създай" class="btn"></p>
+		    </form>
+	</div>	
 </body>
 </html>
