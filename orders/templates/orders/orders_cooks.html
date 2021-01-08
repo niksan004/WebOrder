@@ -49,7 +49,17 @@
     <script type="text/javascript">
         setInterval(function() {
             console.log("reloaded");
-            $( "#orders" ).load( "{% url 'cooks' %} #orders" );
+            $("#orders").load("{% url 'cooks' %} #orders");
+            $("#orders").delegate(".done", "submit", function (e) {
+                e.preventDefault();
+                done_order_id = $(this).find('input[name="done_order_id"]').val();
+                id_table = $(this).find('input[name="id_table"]').val();
+
+                $(this).closest('tr').remove();
+
+                confirmOrders(done_order_id);
+                sendToDistribute(id_table);
+            });
         }, 2000);
 
 

@@ -1,28 +1,47 @@
-{% extends 'manager/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Административен панел</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'manager/home.css' %}">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Kurale&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="header-wrap">
+        <header class="header">
+            WebOrder <span>Мениджър</span>
+        </header>
+    </div>
 
-{% block title %} Управление на менюто {% endblock %}
+    <div class="content">
+        <div class="btns">
+            <ul>
+                <li><button class="btn create"><a href="{% url 'manager_home' %}">Начално меню</a></button></li>
+            </ul>
+        </div>
 
-{% block sub_title %} ~ Управление на менюто ~ {% endblock %}
+        <h1>Управление на масите</h1>
 
-{% block content %}
-    <button onclick="location.href='{% url 'manager_home' %}'" class="btn">Назад</button>
-
-    <table id="orders-cooks"  border=1 frame=void rules=rows>
-        <thead>
-            <tr>
-                <th>Име</th>
-                <th>Променяне на ястие</th>
-                <th>Изтриване на ястие</th>
-            </tr>
-        </thead>
-        {% for dish in dishes %}
-            <tbody>
+        <table id="orders-cooks"  border=1 frame=void rules=rows>
+            <thead>
                 <tr>
-                    <td><strong>{{ dish.name }}</strong></td>
-                    <td><button class="btn"><a href="{% url 'edit_dish' dish.pk %}">Промени</a></button></td>
-                    <td><button class="btn"><a href="{% url 'delete_dish' dish.pk %}">Изтрий</a></button></td>
+                    <th>Име</th>
+                    <th>Променяне на ястие</th>
+                    <th>Изтриване на ястие</th>
                 </tr>
-            </tbody>
-        {% endfor %}
-    </table>
-{% endblock %}
+            </thead>
+            {% for dish in dishes %}
+                <tbody>
+                    <tr>
+                        <td><strong>{{ dish.name }}</strong></td>
+                        <td><button class="btn"><a href="{% url 'edit_dish' dish.pk %}">Промени</a></button></td>
+                        <td><button class="btn"><a href="{% url 'delete_dish' dish.pk %}">Изтрий</a></button></td>
+                    </tr>
+                </tbody>
+            {% endfor %}
+        </table>
+    </div>
+</body>

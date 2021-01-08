@@ -7,6 +7,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from accounts.decorators import admin_required
 
+from .models import PayedTable
 from menu.models import Category, Dish, Table, QrCode
 
 import uuid
@@ -31,6 +32,10 @@ class Home(View):
             curr_table = Table.objects.get(pk=table)
             curr_table.url = url
             curr_table.QR = curr_qr
+
+            payed_table = PayedTable()
+            payed_table.bill = curr_table.check
+            payed_table.save()
 
             orders_list = []
             curr_table.confirmed_orders = json.dumps(orders_list)
@@ -146,3 +151,10 @@ class DeleteDish(DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('dashboard')
+
+
+@method_decorator([login_required, admin_required], name='dispatch')
+class History(View):
+    def get(self, request):
+        payed_tables = PayedTable()
+        return render(request, 'manager/history.html')

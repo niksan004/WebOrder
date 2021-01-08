@@ -1,21 +1,39 @@
-{% extends 'manager/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Административен панел</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'manager/home.css' %}">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Kurale&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="header-wrap">
+        <header class="header">
+            WebOrder <span>Мениджър</span>
+        </header>
+    </div>
 
-{% block title %} Създаване на ястие {% endblock %}
+    <div class="content">
+        <div class="btns">
+            <ul>
+                <li><button class="btn create"><a href="{% url 'manager_home' %}">Начално меню</a></button></li>
+            </ul>
+        </div>
 
-{% block sub_title %} ~ Създаване на ястие ~ {% endblock %}
-
-{% block content %}
     <form enctype="multipart/form-data" method="post">
         {% csrf_token %}
         <ul>
-	        <li>Име: {{ form.name }}</li>
-	        <li>Съставки: {{ form.ingredients }}</li>
-	        <li>Количество: {{ form.quantity }}</li>
-	        <li>Цена: {{ form.price }} лв</li>
-	        <li>Категория: {{ form.category }}</li>
-	        <li>Снимка: {{ form.image }}</li>
-	        <p><input type="submit" value="Създай" class="btn"></p>
-	        <button class="btn"><a href="{% url 'manager_home' %}">Назад</a></button>
+        	<li><h1>Добавяне на ястие</h1></li><br>
+	        <li>Име: {{ form.name }}</li><br>
+	        <li>Съставки: {{ form.ingredients }}</li><br>
+	        <li>Количество: {{ form.quantity }}</li><br>
+	        <li>Цена: {{ form.price }} лв</li><br>
+	        <li>Категория: {{ form.category }}</li><br>
+	        <li>Снимка: {{ form.image }}</li><br>
+	        <input type="submit" value="Добави" class="btn">
         </ul>  
     </form>
-{% endblock %}
+</body>

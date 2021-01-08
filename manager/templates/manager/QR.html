@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'manager/qr.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'manager/home.css' %}">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Kurale&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lora&display=swap" rel="stylesheet">
@@ -17,9 +17,13 @@
     </div>
 
     <div class="content">
-        <h1 class="subtitle">~ QR кодове ~</h1>
+        <div class="btns">
+            <ul>
+                <li><button class="btn create"><a href="{% url 'manager_home' %}">Начално меню</a></button></li>
+            </ul>
+        </div>
 
-        <button class="btn"><a href="{% url 'manager_home' %}">Назад</a></button>
+        <h1>QR кодове</h1>
 
         {% for table, qr in display %}
             <h2>{{ table.id }}</h2>
