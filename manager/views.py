@@ -33,9 +33,10 @@ class Home(View):
             curr_table.url = url
             curr_table.QR = curr_qr
 
-            payed_table = PayedTable()
-            payed_table.bill = curr_table.check
-            payed_table.save()
+            if curr_table.check != 0:
+                payed_table = PayedTable()
+                payed_table.bill = curr_table.check
+                payed_table.save()
 
             orders_list = []
             curr_table.confirmed_orders = json.dumps(orders_list)
@@ -156,5 +157,6 @@ class DeleteDish(DeleteView):
 @method_decorator([login_required, admin_required], name='dispatch')
 class History(View):
     def get(self, request):
-        payed_tables = PayedTable()
-        return render(request, 'manager/history.html')
+        payed_tables = PayedTable.objects.order_by("datetime").reverse()
+        context = {'payed_tables': payed_tables}
+        return render(request, 'manager/history.html', context)

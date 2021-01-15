@@ -1,10 +1,42 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>История</title>
+    <title>Административен панел</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'manager/home.css' %}">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Kurale&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="header-wrap">
+        <header class="header">
+            WebOrder <span>Мениджър</span>
+        </header>
+    </div>
 
-</body>
-</html>
+    <div class="content">
+        <div class="btns">
+            <ul>
+                <li><button class="btn create"><a href="{% url 'manager_home' %}">Начално меню</a></button></li>
+            </ul>
+        </div>
+
+        <table id="table" border=1 rules=rows>
+            <thead>
+                <tr>
+                    <th>Ден</th>
+                    <th>Сметка</th>
+                </tr>
+            </thead>
+            {% for table in payed_tables %}
+                <tbody>
+                    <tr>
+                        <td>{{ table.datetime|date:"d-m-Y G:i" }}</td>
+                        <td class="check"><p>{{ table.bill }} лв</p></td>
+                    </tr>
+                </tbody>
+            {% endfor %}
+        </table>
+    </div>
