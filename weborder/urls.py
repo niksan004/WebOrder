@@ -19,7 +19,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+    path('i18m/', include('django.conf.urls.i18n')),
     path('admin/', admin.site.urls),
+
     path('manager/', include('manager.urls')),
     path('menu/', include('menu.urls')),
     path('orders/', include('orders.urls')),

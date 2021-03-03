@@ -31,6 +31,7 @@ class CustomerOrdersView(ListView):
         context = super().get_context_data(**kwargs)
         json_dec = json.decoder.JSONDecoder()
 
+        # Unconfirmed
         if self.current_table.unconfirmed_orders:
             unc_orders_list = json_dec.decode(self.current_table.unconfirmed_orders)
         else:
@@ -39,10 +40,14 @@ class CustomerOrdersView(ListView):
         unconfirmed_ordered_dishes = []
         price = 0
 
+        d = object
         for order in unc_orders_list:
             d = Dish.objects.get(pk=order)
             unconfirmed_ordered_dishes.append(d)
             price += d.price
+
+        ing = d.ingredients.split(", ")
+        ing.append('--')
 
         # Confirmed
         if self.current_table.confirmed_orders:
@@ -63,7 +68,8 @@ class CustomerOrdersView(ListView):
             'confirmed_orders': confirmed_ordered_dishes,
             'price': price,
             'current_table': self.current_table,
-            'random_url': self.random_url
+            'random_url': self.random_url,
+            'ingredients': ing,
         }
 
         return context
@@ -94,7 +100,6 @@ class ConfirmOrdersView(View):
             final_orders = []
             for order in orders:
                 final_orders.append((current_table_tuple, order))
-            print(final_orders)
             tuple_orders = tuple(final_orders)
 
             cooks = CooksOrders()
@@ -107,16 +112,27 @@ class ConfirmOrdersView(View):
 class CancelOrderView(View):
     def post(self, request):
         if request.is_ajax():
-            order_id = request.POST.get("order_id", "")
-            current_table = request.POST.get("current_table", "")
+            order_id_ser = request.POST.get("order_id", "")
+            current_table_ser = request.POST.get("current_table", "")
 
             json_dec = json.decoder.JSONDecoder()
 
-            table = Table.objects.get(pk=json_dec.decode(current_table))
+            table = Table.objects.get(pk=json_dec.decode(current_table_ser))
+            order_id = json_dec.decode(order_id_ser)
+
             orders = json_dec.decode(table.unconfirmed_orders)
-            orders.remove(json_dec.decode(order_id))
+            orders.remove(order_id)
+
             table.unconfirmed_orders = json.dumps(orders)
             table.save()
+
+            return JsonResponse({'message': 'success'}, status=200)
+
+
+class RemoveIngredient(View):
+    def post(self, request):
+        if request.is_ajax():
+            option = request.POST.get("option", "")
             return JsonResponse({'message': 'success'}, status=200)
 
 
@@ -169,9 +185,6 @@ class DistributeOrdersView(View):
         id_table = json_dec.decode(id_table_ser)
 
         id_table_list = []
-        print(id_table)
-        print(id_table[1])
-        print(id_table[5])
         id_table_list.append(id_table[1])
         id_table_list.append(id_table[5])
 
@@ -179,7 +192,6 @@ class DistributeOrdersView(View):
         orders = [i for i in json_dec.decode(distributors.orders)]
 
         orders.append(id_table_list)
-        print(orders)
 
         distributors.orders = json.dumps(orders)
         distributors.save()
@@ -202,3 +214,27 @@ class DistributeOrdersView(View):
         context = {'orders': orders}
 
         return render(request, 'orders/orders_distribution.html', context)
+
+
+@method_decorator([login_required, distributor_required], name='dispatch')
+class DistDoneView(View):
+    def post(self, request):
+        id_order_ser = request.POST.get("order_done", "")
+        id_table_ser = request.POST.get("table_done", "")
+
+        json_dec = json.decoder.JSONDecoder()
+        id_order = json_dec.decode(id_order_ser)
+        id_table = json_dec.decode(id_table_ser)
+
+        distribute_obj = DistributionOrders.objects.latest('id')
+        orders = [i for i in json_dec.decode(distribute_obj.orders)]
+
+        for index, pair in enumerate(orders):
+            if pair[0] == id_table and pair[1] == id_order:
+                del orders[index]
+                break
+
+        distribute_obj.orders = json.dumps(orders)
+        distribute_obj.save()
+
+        return JsonResponse({'message': 'success'}, status=200)

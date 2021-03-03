@@ -103,3 +103,37 @@ a {
 .buy-btn:active {
   background-color: #9a9189;
 }
+
+.cart-menu {
+    display: flex;
+    text-align: center;
+    position: sticky;
+    bottom: 0;
+    height: 40px;
+    padding-top: 10px;
+    background-color: #383d58;
+    color: white;
+    display: none;
+}
+
+.cart-bill {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.footer {
+    padding-right: 25px;
+    padding-left: 25px;
+    padding-top: 15px;
+    padding-bottom: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    vertical-align : middle;
+    border-top: 1px solid grey;
+    background-color: #ebe8e1;
+}
+
+.email {
+    justify-content: center;
+}

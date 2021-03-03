@@ -8,18 +8,24 @@ import uuid
 
 
 class Category(models.Model):
-    category = models.CharField(max_length=100)
+    title = models.CharField(max_length=100)
+    title_en = models.CharField(max_length=100, blank=True)
+
+    class Meta:
+        verbose_name_plural = 'Categories'
 
     def __str__(self):
-        return f'{self.category}'
+        return f'{self.title}'
 
 
 class Dish(models.Model):
+    category = models.ForeignKey(Category, related_name='dishes', on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     ingredients = models.CharField(max_length=2000)
+    name_en = models.CharField(max_length=100, blank=True)
+    ingredients_en = models.CharField(max_length=2000, blank=True)
     quantity = models.IntegerField(default=300)
     price = models.FloatField()
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='images/', blank=True)
 
     def __str__(self):
@@ -55,3 +61,14 @@ class Table(models.Model):
 
     def __str__(self):
         return f'{self.id}'
+
+
+class Comment(models.Model):
+    comment = models.TextField()
+    time_added = models.DateTimeField(auto_now_add=True, blank=True)
+
+    class Meta:
+        ordering = ('-time_added', )
+
+    def __str__(self):
+        return f'{self.time_added}'

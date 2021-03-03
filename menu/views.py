@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic import View, ListView
 from django.http import JsonResponse
 
-from .models import Dish, Table, Category
+from .models import Dish, Table, Category, Comment
 
 import json
 
@@ -37,6 +37,7 @@ class SendUncOrders(View):
         if request.is_ajax():
             order_id_ser = request.POST.get("order_id", "")
             order_table = request.POST.get("order_table", "")
+            print(order_table)
 
             current_table = Table.objects.get(pk=order_table)
 
@@ -51,3 +52,18 @@ class SendUncOrders(View):
             current_table.save()
 
             return JsonResponse({'new_order': order_id}, status=200)
+
+
+class AddComment(View):
+    def post(self, request):
+        if request.is_ajax():
+            comment_ser = request.POST.get("comment", "")
+
+            json_dec = json.decoder.JSONDecoder()
+            comment = json_dec.decode(comment_ser)
+
+            comment_obj = Comment()
+            comment_obj.comment = comment
+            comment_obj.save()
+
+            return JsonResponse({'message': 'success'}, status=200)
