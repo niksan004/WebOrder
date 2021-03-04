@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<head lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Административен панел</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'manager/home.css' %}">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Kurale&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="header-wrap">
+        <header class="header">
+            WebOrder <span>Мениджър</span>
+        </header>
+    </div>
+
+    <div class="content">
+        <div class="btns">
+            <ul>
+                <li><button class="btn create"><a href="{% url 'manager_home' %}">Начално меню</a></button></li>
+            </ul>
+        </div>
+
+        <table id="table" border=1 rules=rows>
+            <thead>
+                <tr>
+                    <th>Коментар</th>
+                    <th>Време</th>
+                </tr>
+            </thead>
+            {% for comment in comments %}
+                <tbody>
+                    <tr>
+                        <td>{{ comment.comment }}</td>
+                        <td>{{ comment.time_added|date:"d.m.Y G:i" }}</td>
+                    </tr>
+                </tbody>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>
