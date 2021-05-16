@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<head lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Административен панел</title>
@@ -33,10 +33,12 @@
             {% for table in payed_tables %}
                 <tbody>
                     <tr>
-                        <td>{{ table.datetime|date:"d-m-Y G:i" }}</td>
+                        <td>{{ table.datetime|date:"d.m.Y G:i" }}</td>
                         <td class="check"><p>{{ table.bill }} лв</p></td>
                     </tr>
                 </tbody>
             {% endfor %}
         </table>
     </div>
+</body>
+</html>

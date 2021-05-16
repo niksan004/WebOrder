@@ -1,0 +1,35 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0 auto;
+    background-color: #efefef;
+}
+
+.header-wrap {
+	height: 110px;
+}
+
+.header {
+	position: fixed;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 15px;
+    padding-bottom: 0px;
+    height: 110px;
+    margin: 0;
+    width: 100%;
+    font-size: 300%;
+    font-family: 'Kurale', serif;
+    display: flex;
+    justify-content: space-between;
+    vertical-align : middle;
+    border-bottom: 1px solid grey;
+    background-color: #383d58;
+    color: white;
+}
+
+img {
+    float: left;
+}

@@ -81,6 +81,10 @@ td {
 	padding-right: 20px
 }
 
+.stack {
+    font-size: 125%;
+}
+
 #confirm-orders {
     display: table;
     margin: auto;
@@ -109,7 +113,7 @@ td {
     padding-top: 5px;
     padding-left: 15px;
     padding-right: 15px;
-    height: 2em;
+    height: 2.25em;
     border: 2px solid #c3b3a4;
     outline:none;
     background-color: #ebe8e1;
@@ -122,4 +126,46 @@ td {
 
 .btn:active {
   background-color: #9a9189;
+}
+
+.footer {
+    padding-right: 25px;
+    padding-left: 25px;
+    padding-top: 15px;
+    padding-bottom: 20px;
+    width: 100%;
+    text-align: right;
+    display: flex;
+    flex-wrap: wrap;
+    vertical-align : middle;
+    border-top: 1px solid grey;
+    background-color: #ebe8e1;
+}
+
+.footer>* {
+        flex: 1 1 33%;
+}
+
+.name {
+    text-align: left;
+}
+.email {
+    text-align: center;
+}
+
+.comment {
+    height: 75px;
+    resize: none;
+}
+
+.ord-num {
+    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    height: 2.25em;
+    border: 2px solid #c3b3a4;
+    outline: none;
+    background-color: #ebe8e1;
+    color: #56404d;
 }

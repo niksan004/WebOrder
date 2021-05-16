@@ -13,4 +13,5 @@ urlpatterns = [
     path('dashboard/edit/<int:pk>', views.EditDish.as_view(), name='edit_dish'),
     path('dashboard/delete/<int:pk>', views.DeleteDish.as_view(), name='delete_dish'),
     path('history', views.History.as_view(), name='history'),
+    path('comments', views.Comments.as_view(), name='comments'),
 ]

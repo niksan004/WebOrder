@@ -1,0 +1,57 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% trans 'Menu' %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'menu/home.css' %}">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Kurale&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora&display=swap" rel="stylesheet">
+</head>
+<body>
+    {% get_current_language as CURR_LANGUAGE_CODE %}
+    
+    <div class="header-wrap">
+        <header class="header">
+            WebOrder
+
+            <form action="{% url 'set_language' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ redirect_to }}">
+                <select name="language" class="btn">
+                    {% get_available_languages as LANGUAGES %}
+                    {% get_language_info_list for LANGUAGES as languages %}
+                    {% for language in languages %}
+                        <option value="{{ language.code }}" {% if language.code == CURR_LANGUAGE_CODE %} selected {% endif %}>
+                            {{ language.name_local }} ({{ language.code }})
+                        </option>
+                    {% endfor %}      
+                </select>
+                <input type="submit" value="{% trans 'change' %}" class="btn">
+            </form>
+        </header>
+    </div>
+
+    <div class="content">
+		<div class="text">
+			<p>Because of the COVID-19 pandemic the people and the business have been disrupted alike. In particular, restaurants, cafès and pastry shops suffer financial losses, caused by the imposed safety precautions and the fear of the virus. The main issue, regarding safety in such places, is contact between clients and staff.</p>
+
+			<p>The project solves this problem by enabling the client to order and pay from their mobile phone, without the need for a waiter or a waitress. That’s achieved through a web system, where the client does the aforementioned online.</p>
+
+			<p>The system also aids the cooks by sending orders to them momentarily, which after completion are served by the waiters/waitresses to the clients. Everything is monitored and can be observed and controlled by an admin.</p>
+		</div>
+
+		<button type="button" class="btn"><a href="{% url 'manager_home' %}">{% trans 'Admin panel' %}</a></button>
+
+    </div>
+
+    <footer class="footer">
+        <div class="name">{% trans 'Nikolay Stoyanov' %}</div>
+        <div class="email">nikolay.stoyanov04@gmail.com</div>
+        <div><textarea name="comment" class="comment" placeholder="{% trans 'Leave a comment' %}"></textarea></div>
+        <div><button type="button" class="btn">{% trans 'Comment' %}</button></div>
+    </footer>
+</body>
+</html>

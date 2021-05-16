@@ -27,7 +27,9 @@
 	        {% csrf_token %}
 	        <ul>
 	        	<li><h1>Добавяне на категория</h1></li><br>
-		        <li>{{ form.category }}</li><br>
+		        <li>{{ form.title }}</li><br>
+                <li><h1>Добавяне на категория на английски</h1></li><br>
+                <li>{{ form.title_en }}</li><br>
 		        <input type="submit" value="Добави" class="btn">
 	        </ul>  
 	    </form>

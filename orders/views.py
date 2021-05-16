@@ -2,14 +2,18 @@ from django.shortcuts import render
 from django.views.generic import View, ListView
 from django.http import JsonResponse
 
-from menu.models import Dish, Table
 from .models import CooksOrders, DistributionOrders
+from menu.models import Dish, Table, Allergen
+from graphs.models import DishesByPopularity
+from accounts.models import User
+from graphs.models import EmployeeWorkingHours
 
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from accounts.decorators import cook_required, distributor_required
 
 import json
+import datetime
 
 
 class CustomerOrdersView(ListView):
@@ -41,13 +45,21 @@ class CustomerOrdersView(ListView):
         price = 0
 
         d = object
+        ing = []
         for order in unc_orders_list:
             d = Dish.objects.get(pk=order)
             unconfirmed_ordered_dishes.append(d)
             price += d.price
 
-        ing = d.ingredients.split(", ")
-        ing.append('--')
+        if d is not object:
+            ing = d.ingredients.split(", ")
+            ing.append('--')
+
+        # Stacking reappearing orders
+        unc_orders_stacked = []
+
+        for order in set(unconfirmed_ordered_dishes):
+            unc_orders_stacked.append([order, unconfirmed_ordered_dishes.count(order)])
 
         # Confirmed
         if self.current_table.confirmed_orders:
@@ -63,9 +75,16 @@ class CustomerOrdersView(ListView):
             confirmed_ordered_dishes.append(d)
             price += d.price
 
+        # Stacking reappearing orders
+        c_orders_stacked = []
+
+        for order in set(confirmed_ordered_dishes):
+            c_orders_stacked.append([order, confirmed_ordered_dishes.count(order)])
+
+        # Setting up context
         context = {
-            'unconfirmed_orders': unconfirmed_ordered_dishes,
-            'confirmed_orders': confirmed_ordered_dishes,
+            'unconfirmed_orders': unc_orders_stacked,
+            'confirmed_orders': c_orders_stacked,
             'price': price,
             'current_table': self.current_table,
             'random_url': self.random_url,
@@ -78,6 +97,7 @@ class CustomerOrdersView(ListView):
 class ConfirmOrdersView(View):
     def post(self, request):
         if request.is_ajax():
+            # Confirm orders
             order_table = request.POST.get("order_table", "")
 
             json_dec = json.decoder.JSONDecoder()
@@ -106,7 +126,52 @@ class ConfirmOrdersView(View):
             cooks.orders = json.dumps(tuple_orders)
             cooks.save()
 
-            return JsonResponse({'new_order': unc_orders}, status=200)
+            # Add orders to POPULARITY statistics
+            if (
+                DishesByPopularity.objects.exists() and
+                datetime.datetime.now().day == DishesByPopularity.objects.latest('id').datetime.day and
+                datetime.datetime.now().month == DishesByPopularity.objects.latest('id').datetime.month and
+                datetime.datetime.now().year == DishesByPopularity.objects.latest('id').datetime.year
+            ):
+                number_of_orders = json_dec.decode(DishesByPopularity.objects.latest('id').number_of_orders)
+
+                list_of_ids = [dish.id for dish in Dish.objects.all()]
+
+                for ord_id in list_of_ids:
+                    if ord_id in list(number_of_orders.keys()):
+                        number_of_orders[ord_id] = 0
+
+                for order in unc_orders:
+                    for key, value in number_of_orders.items():
+                        if int(order) == int(key):
+                            number_of_orders[key] += 1
+
+                number_of_orders_ser = json.dumps(number_of_orders)
+
+                DishesByPopularity.objects.latest('id').delete()
+
+                graphs_obj = DishesByPopularity()
+                graphs_obj.number_of_orders = number_of_orders_ser
+                graphs_obj.save()
+
+                return JsonResponse({'new_order': unc_orders}, status=200)
+
+            else:
+                list_of_ids = [dish.id for dish in Dish.objects.all()]
+                number_of_orders = {ord_id: 0 for ord_id in list_of_ids}
+
+                for order in unc_orders:
+                    for key, value in number_of_orders.items():
+                        if int(order) == key:
+                            number_of_orders[key] += 1
+
+                number_of_orders_ser = json.dumps(number_of_orders)
+
+                graphs_obj = DishesByPopularity()
+                graphs_obj.number_of_orders = number_of_orders_ser
+                graphs_obj.save()
+
+                return JsonResponse({'new_order': unc_orders}, status=200)
 
 
 class CancelOrderView(View):
@@ -133,6 +198,7 @@ class RemoveIngredient(View):
     def post(self, request):
         if request.is_ajax():
             option = request.POST.get("option", "")
+            request.session[0] = option
             return JsonResponse({'message': 'success'}, status=200)
 
 
@@ -144,15 +210,16 @@ class CooksOrdersView(View):
         json_dec = json.decoder.JSONDecoder()
         orders_ids = json_dec.decode(orders_obj.orders)
 
-        print(orders_ids)
-
         orders = []
         for order_id in orders_ids:
             orders.append(Dish.objects.get(pk=order_id[1]))
 
         orders = zip(orders, orders_ids)
 
-        context = {'orders': orders}
+        # Setting up context
+        context = {
+            'orders': orders,
+        }
         return render(request, 'orders/orders_cooks.html', context)
 
 
@@ -172,6 +239,21 @@ class DoneCooksOrdersView(View):
         cooks = CooksOrders.objects.latest('id')
         cooks.orders = json.dumps(orders)
         cooks.save()
+
+        # Add orders to EMPLOYEE statistics
+        if (
+            EmployeeWorkingHours.objects.exists() and
+            datetime.datetime.now().day == EmployeeWorkingHours.objects.filter(user=request.user).latest('id').datetime.day and
+            datetime.datetime.now().month == EmployeeWorkingHours.objects.filter(user=request.user).latest('id').datetime.month and
+            datetime.datetime.now().year == EmployeeWorkingHours.objects.filter(user=request.user).latest('id').datetime.year
+        ):
+            user_log = EmployeeWorkingHours.objects.filter(user=request.user).latest('id')
+            user_log.number_of_orders = user_log.number_of_orders + 1
+            user_log.save()
+        else:
+            user_log = EmployeeWorkingHours.create(User.objects.get(pk=request.user.id))
+            user_log.number_of_orders = user_log.number_of_orders + 1
+            user_log.save()
 
         return JsonResponse({'message': 'success'}, status=200)
 

@@ -31,8 +31,8 @@ msgid "MENU"
 msgstr "МЕНЮ"
 
 #: .\menu\templates\menu\menu.html:65 .\menu\templates\menu\menu.html:89
-msgid "Number of orders"
-msgstr "Брой поръчки"
+msgid "Num"
+msgstr "Брой"
 
 #: .\menu\templates\menu\menu.html:66 .\menu\templates\menu\menu.html:90
 msgid "Add to cart"

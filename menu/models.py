@@ -22,11 +22,15 @@ class Dish(models.Model):
     category = models.ForeignKey(Category, related_name='dishes', on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     ingredients = models.CharField(max_length=2000)
+    allergens = models.CharField(max_length=2000, blank=True)
     name_en = models.CharField(max_length=100, blank=True)
     ingredients_en = models.CharField(max_length=2000, blank=True)
     quantity = models.IntegerField(default=300)
     price = models.FloatField()
     image = models.ImageField(upload_to='images/', blank=True)
+
+    class Meta:
+        verbose_name_plural = 'Dishes'
 
     def __str__(self):
         return f'{self.name}'
@@ -72,3 +76,11 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'{self.time_added}'
+
+
+class Allergen(models.Model):
+    name = models.CharField(max_length=100)
+    name_en = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f'{self.name}'

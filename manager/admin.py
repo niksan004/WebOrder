@@ -1,4 +1,4 @@
 from django.contrib import admin
-from .models import PayedTable
+from .models import PaidTable
 
-admin.site.register(PayedTable)
+admin.site.register(PaidTable)

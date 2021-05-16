@@ -7,6 +7,11 @@ from .models import Dish, Table, Category, Comment
 import json
 
 
+class Home(View):
+    def get(self, request):
+        return render(request, 'menu/home.html')
+
+
 class Menu(ListView):
     model = Dish
     template_name = 'menu/menu.html'
@@ -17,6 +22,7 @@ class Menu(ListView):
         self.current_table = object
         tables = Table.objects.all()
 
+        # Find table number
         for table in tables:
             if str(self.random_url) == str(table.url):
                 self.current_table = Table.objects.get(pk=table.id)
@@ -37,18 +43,18 @@ class SendUncOrders(View):
         if request.is_ajax():
             order_id_ser = request.POST.get("order_id", "")
             order_table = request.POST.get("order_table", "")
-            print(order_table)
 
             current_table = Table.objects.get(pk=order_table)
 
             json_dec = json.decoder.JSONDecoder()
 
-            prev_unc_orders = json_dec.decode(current_table.unconfirmed_orders)
+            unc_orders = json_dec.decode(current_table.unconfirmed_orders)
             order_id = json_dec.decode(order_id_ser)
 
-            final_unc_orders = prev_unc_orders + order_id
+            for order in order_id:
+                unc_orders.append(order)
 
-            current_table.unconfirmed_orders = json.dumps(final_unc_orders)
+            current_table.unconfirmed_orders = json.dumps(unc_orders)
             current_table.save()
 
             return JsonResponse({'new_order': order_id}, status=200)

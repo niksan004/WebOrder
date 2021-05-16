@@ -22,11 +22,12 @@ urlpatterns = [
     path('i18m/', include('django.conf.urls.i18n')),
     path('admin/', admin.site.urls),
 
+    path('', include('menu.urls')),
     path('manager/', include('manager.urls')),
     path('menu/', include('menu.urls')),
     path('orders/', include('orders.urls')),
     path('accounts/', include('accounts.urls')),
-    path('paypal/', include('paypal.standard.ipn.urls')),
+    path('graphs/', include('graphs.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

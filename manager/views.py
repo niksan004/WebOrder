@@ -7,8 +7,8 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from accounts.decorators import admin_required
 
-from .models import PayedTable
-from menu.models import Category, Dish, Table, QrCode
+from .models import PaidTable
+from menu.models import Category, Dish, Table, QrCode, Comment
 
 import uuid
 import json
@@ -34,7 +34,7 @@ class Home(View):
             curr_table.QR = curr_qr
 
             if curr_table.check != 0:
-                payed_table = PayedTable()
+                payed_table = PaidTable()
                 payed_table.bill = curr_table.check
                 payed_table.save()
 
@@ -75,7 +75,7 @@ class CheckUpdate(View):
 class NewCategory(CreateView):
     model = Category
     template_name = 'manager/category_form.html'
-    fields = ('category', )
+    fields = ('title', 'title_en', )
 
     def get_success_url(self):
         return reverse('new_category')
@@ -85,7 +85,7 @@ class NewCategory(CreateView):
 class NewDish(CreateView):
     model = Dish
     template_name = 'manager/dish_form.html'
-    fields = ('name', 'ingredients', 'quantity', 'price', 'category', 'image')
+    fields = ('name', 'ingredients', 'allergens', 'quantity', 'price', 'category', 'image')
 
     def get_success_url(self):
         return reverse('new_dish')
@@ -157,6 +157,14 @@ class DeleteDish(DeleteView):
 @method_decorator([login_required, admin_required], name='dispatch')
 class History(View):
     def get(self, request):
-        payed_tables = PayedTable.objects.order_by("datetime").reverse()
+        payed_tables = PaidTable.objects.order_by("datetime").reverse()
         context = {'payed_tables': payed_tables}
         return render(request, 'manager/history.html', context)
+
+
+@method_decorator([login_required, admin_required], name='dispatch')
+class Comments(View):
+    def get(self, request):
+        comments = Comment.objects.order_by("time_added")
+        context = {'comments': comments}
+        return render(request, 'manager/comments.html', context)

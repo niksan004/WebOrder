@@ -46,8 +46,7 @@ INSTALLED_APPS = [
     'orders',
     'manager',
     'accounts',
-    'paypal.standard.ipn',
-    'payment',
+    'graphs',
 ]
 
 MIDDLEWARE = [

@@ -31,6 +31,8 @@ body {
 a {
 	height: 90.19px;
 	width: 115.19px;
+    text-decoration: none;
+    color: white;
 }
 
 .header-icon{
@@ -89,7 +91,7 @@ a {
     padding-top: 5px;
     padding-left: 15px;
     padding-right: 15px;
-    height: 2em;
+    height: 2.25em;
     border: 2px solid #c3b3a4;
     outline:none;
     background-color: #ebe8e1;
@@ -111,15 +113,15 @@ a {
     bottom: 0;
     height: 40px;
     padding-top: 10px;
-    background-color: #383d58;
+    background-color: #868480;
     color: white;
     display: none;
 }
 
-.cart-bill {
+/*.cart-bill {
     display: inline-block;
     vertical-align: middle;
-}
+}*/
 
 .footer {
     padding-right: 25px;
@@ -127,13 +129,57 @@ a {
     padding-top: 15px;
     padding-bottom: 20px;
     width: 100%;
+    text-align: right;
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
     vertical-align : middle;
     border-top: 1px solid grey;
     background-color: #ebe8e1;
 }
 
+.footer>* {
+        flex: 1 1 33%;
+}
+
+.name {
+    text-align: left;
+}
 .email {
-    justify-content: center;
+    text-align: center;
+}
+
+.comment {
+    height: 75px;
+    resize: none;
+}
+
+.comment-btn {
+    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    height: 2.25em;
+    border: 2px solid #c3b3a4;
+    outline:none;
+    background-color: #ebe8e1;
+    color: #56404d;
+}
+.comment-btn:hover {
+    background-color: #ada095;
+}
+
+.comment-btn:active {
+  background-color: #9a9189;
+}
+
+.ord-num {
+    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-left: 15px;
+    height: 2.25em;
+    width: 5em;
+    border: 2px solid #c3b3a4;
+    outline: none;
+    background-color: #ebe8e1;
+    color: #56404d;
 }
